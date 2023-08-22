@@ -16,7 +16,13 @@ end_date = st.date_input("Select end date", datetime.date.today())
 ticker = st.selectbox("ticker", AVAILABLE_TICKERS)
 value = st.selectbox("value to plot", AVAILABLE_VALUES)
 
-data = yf.download(ticker, start_date, end_date)
+
+@st.cache_data
+def get_data(ticker, start_date, end_date):
+    return yf.download(ticker, start_date, end_date)
+
+
+data = get_data(ticker, start_date, end_date)
 
 fig = go.Figure()
 fig.add_scatter(x=data.index, y=data[value], name=value)
