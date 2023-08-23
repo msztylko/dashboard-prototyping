@@ -11,7 +11,6 @@ import datetime
 client = redis.Redis()
 cache_ttl = int(datetime.timedelta(hours=3).total_seconds())
 
-AVAILABLE_TICKERS = ("AAPL", "GOOGL", "AMZN")
 AVAILABLE_VALUES = ("Open", "High", "Low", "Close", "Adj Close", "Volume")
 
 st.markdown(
@@ -28,7 +27,7 @@ start_date = st.sidebar.date_input(
     "Select start date", datetime.datetime(2013, 1, 1, 0, 0)
 )
 end_date = st.sidebar.date_input("Select end date", datetime.date.today())
-ticker = st.sidebar.text_input("ticker", 'AAPL')
+ticker = st.sidebar.text_input("ticker", "AAPL")
 value = st.sidebar.selectbox("value to plot", AVAILABLE_VALUES)
 
 
