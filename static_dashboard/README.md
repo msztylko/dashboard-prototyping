@@ -13,6 +13,7 @@ Quick working demo that will guide further development. Main issues to fix at th
 
 ### Notes to self
 
+#### V1
 Basic structure of a Streamlit app can be very lean:
 
 ```python
@@ -50,3 +51,17 @@ st.plotly_chart(fig)
 ```
 
 Here, the main focus is the app layout and plots.
+
+One of the most useful changes at the early stage is `st.cache_data`. 
+
+```python
+@st.cache_data
+def get_data(ticker, start_date, end_date):
+    return yf.download(ticker, start_date, end_date)
+
+
+data = get_data(ticker, start_date, end_date)
+```
+
+primarily to avoid redownloading data any time you click something on the dashboard. 
+By default, [Streamlit](https://docs.streamlit.io/library/advanced-features/caching) runs your script from top to bottom at every user interaction or code change.
