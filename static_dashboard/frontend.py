@@ -1,4 +1,5 @@
 import yfinance as yf
+import requests
 import pandas as pd
 import json
 import datetime
@@ -32,19 +33,12 @@ value = st.sidebar.selectbox("value to plot", AVAILABLE_VALUES)
 
 
 def get_data(ticker, start_date, end_date):
-    # FIXME
-    end_date = date_to_datetime(end_date)
-    start_date = date_to_datetime(start_date)
-    cache_key = f"{ticker}:{start_date.timestamp()}:{end_date.timestamp()}"
-    cached_raw_value = client.get(cache_key)
-
-    if cached_raw_value is not None:
-        return pd.read_json(json.loads(cached_raw_value))
-
-    value = yf.download(ticker, start_date, end_date)
-    raw_value = json.dumps(value.to_json())
-    client.set(cache_key, raw_value, ex=cache_ttl)
-    return value
+    end_date = date_to_datetime(end_date).isoformat()
+    start_date = date_to_datetime(start_date).isoformat()
+    data = requests.get(
+        f"http://localhost:5000/prices/{ticker}/{start_date}/{end_date}"
+    )
+    return pd.DataFrame(data.json())
 
 
 data = get_data(ticker, start_date, end_date)
