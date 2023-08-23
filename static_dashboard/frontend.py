@@ -31,7 +31,6 @@ ticker = st.sidebar.selectbox("ticker", AVAILABLE_TICKERS)
 value = st.sidebar.selectbox("value to plot", AVAILABLE_VALUES)
 
 
-@st.cache_data
 def get_data(ticker, start_date, end_date):
     # FIXME
     end_date = date_to_datetime(end_date)
