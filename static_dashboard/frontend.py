@@ -28,7 +28,7 @@ start_date = st.sidebar.date_input(
     "Select start date", datetime.datetime(2013, 1, 1, 0, 0)
 )
 end_date = st.sidebar.date_input("Select end date", datetime.date.today())
-ticker = st.sidebar.selectbox("ticker", AVAILABLE_TICKERS)
+ticker = st.sidebar.text_input("ticker", 'AAPL')
 value = st.sidebar.selectbox("value to plot", AVAILABLE_VALUES)
 
 
