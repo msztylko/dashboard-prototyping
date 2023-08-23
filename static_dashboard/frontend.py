@@ -1,4 +1,6 @@
 import yfinance as yf
+import pandas as pd
+import json
 import datetime
 import streamlit as st
 import plotly.graph_objects as go
@@ -16,27 +18,33 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-def today_midnight():
-    dt = datetime.date.today()
+
+def date_to_datetime(dt):
     return datetime.datetime.combine(dt, datetime.datetime.min.time())
 
-start_date = st.sidebar.date_input("Select start date", datetime.datetime(2013, 1, 1, 0, 0))
-end_date = st.sidebar.date_input("Select end date", today_midnight())
+
+start_date = st.sidebar.date_input(
+    "Select start date", datetime.datetime(2013, 1, 1, 0, 0)
+)
+end_date = st.sidebar.date_input("Select end date", datetime.date.today())
 ticker = st.sidebar.selectbox("ticker", AVAILABLE_TICKERS)
 value = st.sidebar.selectbox("value to plot", AVAILABLE_VALUES)
 
 
 @st.cache_data
 def get_data(ticker, start_date, end_date):
-    # cache_key = f"{ticker}:{start_date.timestamp()}:{end_date.timestamp()}"
-    # cached_raw_value = client.get(cache_key)
-    # 
-    # if cached_raw_value is not None:
-    #     return json.loads(cached_raw_value)
+    # FIXME
+    end_date = date_to_datetime(end_date)
+    start_date = date_to_datetime(start_date)
+    cache_key = f"{ticker}:{start_date.timestamp()}:{end_date.timestamp()}"
+    cached_raw_value = client.get(cache_key)
+
+    if cached_raw_value is not None:
+        return pd.read_json(json.loads(cached_raw_value))
 
     value = yf.download(ticker, start_date, end_date)
-    # raw_value = json.dumps(value.to_json())
-    # client.set(cache_key, raw_value, ex=cache_ttl)
+    raw_value = json.dumps(value.to_json())
+    client.set(cache_key, raw_value, ex=cache_ttl)
     return value
 
 
