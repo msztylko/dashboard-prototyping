@@ -65,3 +65,32 @@ data = get_data(ticker, start_date, end_date)
 
 primarily to avoid redownloading data any time you click something on the dashboard. 
 By default, [Streamlit](https://docs.streamlit.io/library/advanced-features/caching) runs your script from top to bottom at every user interaction or code change.
+
+#### V2
+
+We can cache data used by dashboard with Redis:
+
+```python
+client = redis.Redis()
+cache_ttl = int(datetime.timedelta(hours=3).total_seconds())
+
+def get_data(ticker, start_date, end_date):
+    end_date = date_to_datetime(end_date)
+    start_date = date_to_datetime(start_date)
+    cache_key = f"{ticker}:{start_date.timestamp()}:{end_date.timestamp()}"
+    cached_raw_value = client.get(cache_key)
+
+    if cached_raw_value is not None:
+        return pd.read_json(json.loads(cached_raw_value))
+
+    value = yf.download(ticker, start_date, end_date)
+    raw_value = json.dumps(value.to_json())
+    client.set(cache_key, raw_value, ex=cache_ttl)
+    return value
+```
+
+But there are at least 2 issues:
+ - still inefficient for time series data
+ - quick and dirty solution: very simple serialization and `get_data` starts to do too much
+
+Let's create a backend that will be responsible for getting 3rd party data and persisting it (to cache and later to DB).
