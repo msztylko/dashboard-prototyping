@@ -11,10 +11,10 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-start_date = st.date_input("Select start date", datetime.date(2013, 1, 1))
-end_date = st.date_input("Select end date", datetime.date.today())
-ticker = st.selectbox("ticker", AVAILABLE_TICKERS)
-value = st.selectbox("value to plot", AVAILABLE_VALUES)
+start_date = st.sidebar.date_input("Select start date", datetime.date(2013, 1, 1))
+end_date = st.sidebar.date_input("Select end date", datetime.date.today())
+ticker = st.sidebar.selectbox("ticker", AVAILABLE_TICKERS)
+value = st.sidebar.selectbox("value to plot", AVAILABLE_VALUES)
 
 
 @st.cache_data
