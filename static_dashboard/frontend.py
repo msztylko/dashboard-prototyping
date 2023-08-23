@@ -2,6 +2,11 @@ import yfinance as yf
 import datetime
 import streamlit as st
 import plotly.graph_objects as go
+import redis
+import datetime
+
+client = redis.Redis()
+cache_ttl = int(datetime.timedelta(hours=3).total_seconds())
 
 AVAILABLE_TICKERS = ("AAPL", "GOOGL", "AMZN")
 AVAILABLE_VALUES = ("Open", "High", "Low", "Close", "Adj Close", "Volume")
@@ -11,15 +16,28 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-start_date = st.sidebar.date_input("Select start date", datetime.date(2013, 1, 1))
-end_date = st.sidebar.date_input("Select end date", datetime.date.today())
+def today_midnight():
+    dt = datetime.date.today()
+    return datetime.datetime.combine(dt, datetime.datetime.min.time())
+
+start_date = st.sidebar.date_input("Select start date", datetime.datetime(2013, 1, 1, 0, 0))
+end_date = st.sidebar.date_input("Select end date", today_midnight())
 ticker = st.sidebar.selectbox("ticker", AVAILABLE_TICKERS)
 value = st.sidebar.selectbox("value to plot", AVAILABLE_VALUES)
 
 
 @st.cache_data
 def get_data(ticker, start_date, end_date):
-    return yf.download(ticker, start_date, end_date)
+    # cache_key = f"{ticker}:{start_date.timestamp()}:{end_date.timestamp()}"
+    # cached_raw_value = client.get(cache_key)
+    # 
+    # if cached_raw_value is not None:
+    #     return json.loads(cached_raw_value)
+
+    value = yf.download(ticker, start_date, end_date)
+    # raw_value = json.dumps(value.to_json())
+    # client.set(cache_key, raw_value, ex=cache_ttl)
+    return value
 
 
 data = get_data(ticker, start_date, end_date)
