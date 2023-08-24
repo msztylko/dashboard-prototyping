@@ -165,3 +165,14 @@ def fetch_prices_with_cache(
 ```
 
 Since we are storing time series as JSON it might be worth to try [Redis-JSON](https://redis.com/modules/redis-json/) in the future.
+
+Main problem at this stage is inefficieny of time series caching. Let's establish simple [benchmark](https://github.com/msztylko/dashboard-prototyping/blob/master/static_dashboard/load_test.py) to compare before and after the changes:
+
+```bash
+********** LOAD TEST **********
+
+
+********** SUMMARY **********
+Total time elapsed: 50.33 seconds
+Average time elapsed: 0.50 seconds
+```
