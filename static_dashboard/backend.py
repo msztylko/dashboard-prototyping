@@ -1,14 +1,12 @@
-from flask import Flask
-from pydantic import BaseModel
-from pydantic import TypeAdapter
-import pydantic
-from pydantic.json import pydantic_encoder
+import datetime
+import json
 
 import pydantic
-import json
-import yfinance as yf
 import redis
-import datetime
+import yfinance as yf
+from flask import Flask
+from pydantic import BaseModel, TypeAdapter
+from pydantic.json import pydantic_encoder
 
 redis = redis.Redis()
 cache_ttl = int(datetime.timedelta(hours=3).total_seconds())

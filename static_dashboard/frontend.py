@@ -1,12 +1,12 @@
-import yfinance as yf
-import requests
-import pandas as pd
-import json
 import datetime
-import streamlit as st
+import json
+
+import pandas as pd
 import plotly.graph_objects as go
 import redis
-import datetime
+import requests
+import streamlit as st
+import yfinance as yf
 
 client = redis.Redis()
 cache_ttl = int(datetime.timedelta(hours=3).total_seconds())
