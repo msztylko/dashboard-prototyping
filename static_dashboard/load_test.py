@@ -1,8 +1,9 @@
+import datetime
 import random
 import time
-import requests
-import datetime
 from functools import partial
+
+import requests
 
 BACKEND_URL = "http://localhost:5000"
 
@@ -25,17 +26,18 @@ if __name__ == '__main__':
     times = []
 
     print('*' * 10 + ' LOAD TEST ' + '*' * 10)
+    print(f'Testing {num_tests} requests.')
     print()
     
     while num_tests > 0:
         start_date = gen_random_date()
         end_date = start_date + datetime.timedelta(days=365)
-        print(f"Requesting {ticker=}, {start_date=}, {end_date=}") 
+        # print(f"Requesting {ticker=}, {start_date=}, {end_date=}") 
         start = time.time()
         test_backend(ticker, start_date, end_date)
         end = time.time()
         elapsed = end - start
-        print(f"Request took {elapsed:.2f} seconds.")
+        # print(f"Request took {elapsed:.2f} seconds.")
         times.append(elapsed)
         num_tests -= 1
 
