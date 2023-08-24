@@ -7,6 +7,7 @@ import requests
 
 BACKEND_URL = "http://localhost:5000"
 
+
 def gen_random_date():
     rand_year = partial(random.choice, range(2010, 2023))
     rand_month = partial(random.choice, range(1, 13))
@@ -18,21 +19,21 @@ def gen_random_date():
 def test_backend(ticker, start_date, end_date):
     data = requests.get(f"{BACKEND_URL}/prices/{ticker}/{start_date}/{end_date}")
     return data
-    
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     num_tests = 100
-    ticker = 'AAPL'
+    ticker = "AAPL"
     times = []
 
-    print('*' * 10 + ' LOAD TEST ' + '*' * 10)
-    print(f'Testing {num_tests} requests.')
+    print("*" * 10 + " LOAD TEST " + "*" * 10)
+    print(f"Testing {num_tests} requests.")
     print()
-    
+
     while num_tests > 0:
         start_date = gen_random_date()
         end_date = start_date + datetime.timedelta(days=365)
-        # print(f"Requesting {ticker=}, {start_date=}, {end_date=}") 
+        # print(f"Requesting {ticker=}, {start_date=}, {end_date=}")
         start = time.time()
         test_backend(ticker, start_date, end_date)
         end = time.time()
@@ -41,7 +42,7 @@ if __name__ == '__main__':
         times.append(elapsed)
         num_tests -= 1
 
-    print() 
-    print('*' * 10 + ' SUMMARY ' + '*' * 10)
-    print(f'Total time elapsed: {sum(times):.2f} seconds')
-    print(f'Average time elapsed: {sum(times)/len(times):.2f} seconds')
+    print()
+    print("*" * 10 + " SUMMARY " + "*" * 10)
+    print(f"Total time elapsed: {sum(times):.2f} seconds")
+    print(f"Average time elapsed: {sum(times)/len(times):.2f} seconds")
