@@ -134,3 +134,34 @@ def prices(ticker: str, start: str, end: str):
 if __name__ == "__main__":
     app.run(host="0.0.0.0")
 ```
+
+Adding Redis cache to backend:
+
+```python
+redis = redis.Redis()
+cache_ttl = int(datetime.timedelta(hours=3).total_seconds())
+
+def fetch_prices(
+    ticker: str, start_date: datetime.datetime, end_date: datetime.datetime
+) -> list[PriceData]:
+    ...
+
+def fetch_prices_with_cache(
+    ticker: str,
+    start_date: datetime.datetime,
+    end_date: datetime.datetime,
+) -> list[PriceData]:
+    cache_key = f"{ticker}:{start_date.timestamp()}:{end_date.timestamp()}"
+
+    cached_raw_value = redis.get(cache_key)
+    if cached_raw_value is not None:
+        ta = TypeAdapter(list[PriceData])
+        return ta.validate_python(json.loads(cached_raw_value))
+
+    value = fetch_prices(ticker, start_date, end_date)
+    raw_value = json.dumps(value, separators=(",", ":"), default=pydantic_encoder)
+    redis.set(cache_key, raw_value, ex=cache_ttl)
+    return value
+```
+
+Since we are storing time series as JSON it might be worth to try [Redis-JSON](https://redis.com/modules/redis-json/) in the future.
