@@ -8,10 +8,7 @@ import requests
 import streamlit as st
 import yfinance as yf
 
-client = redis.Redis()
-cache_ttl = int(datetime.timedelta(hours=3).total_seconds())
-
-AVAILABLE_VALUES = ("Open", "High", "Low", "Close", "Adj Close", "Volume")
+AVAILABLE_VALUES = ("open", "high", "low", "close", "adj_close", "volume")
 
 st.markdown(
     "<h1 style='text-align: center; color: orange;'> Stock Prices</h1>",
@@ -37,7 +34,8 @@ def get_data(ticker, start_date, end_date):
     data = requests.get(
         f"http://localhost:5000/prices/{ticker}/{start_date}/{end_date}"
     )
-    return pd.DataFrame(data.json())
+    df = pd.DataFrame(dict(price) for price in data.json())
+    return df
 
 
 data = get_data(ticker, start_date, end_date)

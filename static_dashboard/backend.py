@@ -61,7 +61,6 @@ def fetch_prices_with_cache(
     if cached_raw_value is not None:
         ta = TypeAdapter(list[PriceData])
         return ta.validate_python(json.loads(cached_raw_value))
-        # return pydantic.parse_raw_as(list[PriceData], cached_raw_value)
 
     value = fetch_prices(ticker, start_date, end_date)
     raw_value = json.dumps(value, separators=(",", ":"), default=pydantic_encoder)
