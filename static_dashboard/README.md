@@ -209,3 +209,81 @@ Average time elapsed: 0.07 seconds
 ```
 
 Bucket caching adds more granularity to our requests which results in longer max time for request (when the cache was still cold). However, overall time is 3x shorter and average latency per request is also 3x smaller.
+
+Bucket caching implementation:
+
+```python
+class WeeklyBucket(BaseModel):
+    """Model to represent a weekly bucket, the unit of fetching data."""
+
+    start: datetime.datetime
+
+    @property
+    def end(self) -> datetime:
+        return self.start + week
+
+    @field_validator("start")
+    @classmethod
+    def align_start(cls, v: datetime) -> datetime:
+        """Align weekly bucket start date."""
+        seconds_in_week = week.total_seconds()
+        return datetime.datetime.fromtimestamp(
+            (v.timestamp() // seconds_in_week * seconds_in_week), datetime.timezone.utc
+        )
+
+    def next(self) -> "WeeklyBucket":
+        """Return the next bucket."""
+        return WeeklyBucket(start=self.end)
+
+    def cache_key(self) -> str:
+        """Helper function to return the cache key by the bucket start date."""
+        return f"{int(self.start.timestamp())}"
+
+    model_config = ConfigDict(frozen=True)
+
+
+def get_buckets(start_date: datetime, end_date: datetime) -> list[WeeklyBucket]:
+    """Return the list of weekly buckets in a date range."""
+    buckets: list[WeeklyBucket] = []
+
+    if end_date < start_date:
+        raise ValueError(f"{end_date=} must be greater than {start_date=}")
+
+    bucket = WeeklyBucket(start=start_date)
+    while True:
+        buckets.append(bucket)
+        bucket = bucket.next()
+        if bucket.end >= end_date:
+            break
+    return buckets
+
+def fetch_prices_with_cache(
+    ticker: str,
+    start_date: datetime.datetime,
+    end_date: datetime.datetime,
+) -> list[PriceData]:
+    buckets = get_buckets(start_date, end_date)
+
+    transactions = []
+    for bucket in buckets:
+        cache_key = f"{ticker}:{bucket.cache_key()}"
+
+        cached_raw_value = redis.get(cache_key)
+        if cached_raw_value is not None:
+            ta = TypeAdapter(list[PriceData])
+            transactions += ta.validate_python(json.loads(cached_raw_value))
+            continue
+
+        value = fetch_prices(ticker, bucket.start, bucket.end)
+        raw_value = json.dumps(value, separators=(",", ":"), default=pydantic_encoder)
+        redis.set(cache_key, raw_value, ex=cache_ttl)
+        transactions += value
+
+    return [tx for tx in transactions if start_date <= tx.timestamp < end_date]
+
+
+def get_cache_ttl(bucket: WeeklyBucket):
+    if bucket.end >= datetime.now(tz=datetime.timezone.utc):
+        return int(timedelta(minutes=10).total_seconds())
+    return int(timedelta(days=30).total_seconds())
+```
