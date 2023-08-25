@@ -17,6 +17,8 @@ Quick working demo that will guide further development. Main issues to fix at th
 <img src="https://github.com/msztylko/dashboard-prototyping/blob/master/images/backend.gif" data-canonical- width="700" height="600" align="center" />
 </p>
 
+Scalable backend with efficient cache with implementation guided by load testing. Many improvements on the performance front are still possible , but at this stage it's more valuable to focus on UI.
+
 ### Notes to self
 
 #### V1
