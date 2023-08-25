@@ -197,5 +197,15 @@ Inspired by: https://roman.pt/posts/time-series-caching/
 Cache data based on weekly buckets. Weekly buckets are the easiest to implement, but in reality bucket frequency needs to be adjsuted to the specific time series data
 
 ```bash
+********** LOAD TEST **********
+Testing 500 requests.
 
+
+********** SUMMARY **********
+Total time elapsed: 35.87 seconds
+Min time elapsed: 0.00 seconds
+Max time elapsed: 6.14 seconds
+Average time elapsed: 0.07 seconds
 ```
+
+Bucket caching adds more granularity to our requests which results in longer max time for request (when the cache was still cold). However, overall time is 3x shorter and average latency per request is also 3x smaller.
