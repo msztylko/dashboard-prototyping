@@ -179,7 +179,15 @@ Main problem at this stage is inefficieny of time series caching. Let's establis
 Ignore overlap in time series data and simply cache request date range
 
 ```bash
+********** LOAD TEST **********
+Testing 500 requests.
 
+
+********** SUMMARY **********
+Total time elapsed: 112.70 seconds
+Min time elapsed: 0.17 seconds
+Max time elapsed: 1.00 seconds
+Average time elapsed: 0.23 seconds
 ```
 
 #### Bucket caching
