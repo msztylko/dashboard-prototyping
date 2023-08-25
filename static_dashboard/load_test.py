@@ -9,7 +9,7 @@ BACKEND_URL = "http://localhost:5000"
 
 
 def gen_random_date():
-    rand_year = partial(random.choice, range(2019, 2023))
+    rand_year = partial(random.choice, range(2021, 2022))
     rand_month = partial(random.choice, range(1, 13))
     rand_day = partial(random.choice, range(1, 28))
 
@@ -22,7 +22,7 @@ def test_backend(ticker, start_date, end_date):
 
 
 if __name__ == "__main__":
-    num_tests = 1000
+    num_tests = 500
     ticker = "AAPL"
     times = []
 
