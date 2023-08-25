@@ -289,3 +289,10 @@ def get_cache_ttl(bucket: WeeklyBucket):
         return int(timedelta(minutes=10).total_seconds())
     return int(timedelta(days=30).total_seconds())
 ```
+
+There are many more improvements that can still be explored:
+ - different frequency of buckets, fine-tuned to specific application
+ - cache warmup
+ - RedisJSON for more efficient processing of JSON data
+ - Redis Time series
+ - parallel processing as buckets don't have to be loaded in sequence
