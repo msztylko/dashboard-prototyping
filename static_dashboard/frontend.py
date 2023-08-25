@@ -21,7 +21,7 @@ def date_to_datetime(dt):
 
 
 start_date = st.sidebar.date_input(
-    "Select start date", datetime.datetime(2013, 1, 1, 0, 0)
+    "Select start date", datetime.datetime(2020, 1, 1, 0, 0)
 )
 end_date = st.sidebar.date_input("Select end date", datetime.date.today())
 ticker = st.sidebar.text_input("ticker", "AAPL")
