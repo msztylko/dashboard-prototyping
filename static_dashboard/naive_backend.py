@@ -5,7 +5,7 @@ import pydantic
 import redis
 import yfinance as yf
 from flask import Flask
-from pydantic import BaseModel, TypeAdapter
+from pydantic import BaseModel, ConfigDict, TypeAdapter
 from pydantic.json import pydantic_encoder
 
 redis = redis.Redis()
@@ -23,9 +23,7 @@ class PriceData(pydantic.BaseModel):
     close: float
     adj_close: float
     volume: float
-
-    class Config:
-        frozen = True
+    model_config = ConfigDict(frozen=True)
 
 
 def fetch_prices(
