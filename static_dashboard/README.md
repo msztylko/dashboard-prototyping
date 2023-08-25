@@ -174,11 +174,20 @@ Since we are storing time series as JSON it might be worth to try [Redis-JSON](h
 
 Main problem at this stage is inefficieny of time series caching. Let's establish simple [benchmark](https://github.com/msztylko/dashboard-prototyping/blob/master/static_dashboard/load_test.py) to compare before and after the changes:
 
+#### Naive caching
+
+Ignore overlap in time series data and simply cache request date range
+
 ```bash
-********** LOAD TEST **********
 
+```
 
-********** SUMMARY **********
-Total time elapsed: 50.33 seconds
-Average time elapsed: 0.50 seconds
+#### Bucket caching
+
+Inspired by: https://roman.pt/posts/time-series-caching/
+
+Cache data based on weekly buckets. Weekly buckets are the easiest to implement, but in reality bucket frequency needs to be adjsuted to the specific time series data
+
+```bash
+
 ```
