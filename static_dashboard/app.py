@@ -71,6 +71,8 @@ def get_data(ticker, start_date, end_date):
         f"http://localhost:5000/prices/{ticker}/{start_date}/{end_date}"
     )
     df = pd.DataFrame(dict(price) for price in data.json())
+    df['date'] = pd.to_datetime(df['timestamp'])
+    df = df.set_index('date')
     return df
 
 
