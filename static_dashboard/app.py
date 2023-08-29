@@ -87,9 +87,9 @@ def get_data(ticker, start_date, end_date):
 def update_graph(ticker1, ticker2, start, end, value):
     fig = go.Figure()
     data1 = get_data(ticker1, start, end)
-    fig.add_scatter(x=data1.index, y=data1[value], name=value)
+    fig.add_scatter(x=data1.index, y=data1[value], name=ticker1)
     data2 = get_data(ticker2, start, end)
-    fig.add_scatter(x=data2.index, y=data2[value], name=value)
+    fig.add_scatter(x=data2.index, y=data2[value], name=ticker2)
     fig.update_layout(
         title_text=f"{ticker1} and {ticker2}  {value}",
         title_x=0.5,
