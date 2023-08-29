@@ -28,6 +28,7 @@ ticker = st.sidebar.text_input("ticker", "AAPL")
 value = st.sidebar.selectbox("value to plot", AVAILABLE_VALUES)
 
 
+@st.cache_data
 def get_data(ticker, start_date, end_date):
     end_date = date_to_datetime(end_date).isoformat()
     start_date = date_to_datetime(start_date).isoformat()
@@ -39,6 +40,7 @@ def get_data(ticker, start_date, end_date):
 
 
 data = get_data(ticker, start_date, end_date)
+
 
 fig = go.Figure()
 fig.add_scatter(x=data.index, y=data[value], name=value)
