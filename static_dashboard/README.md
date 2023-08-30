@@ -14,7 +14,7 @@ Quick working demo that will guide further development. Main issues to fix at th
 ## V2 - Efficient Backend
 
 <p align="center">
-<img src="https://github.com/msztylko/dashboard-prototyping/blob/master/images/dash_frontend.gif" data-canonical- width="700" height="600" align="center" />
+<img src="https://github.com/msztylko/dashboard-prototyping/blob/master/images/backend.gif" data-canonical- width="700" height="600" align="center" />
 </p>
 
 Scalable backend with efficient cache with implementation guided by load testing. Many improvements on the performance front are still possible , but at this stage it's more valuable to focus on UI.
@@ -22,7 +22,7 @@ Scalable backend with efficient cache with implementation guided by load testing
 ## V3 - Interactive UI
 
 <p align="center">
-<img src="https://github.com/msztylko/dashboard-prototyping/blob/master/images/backend.gif" data-canonical- width="700" height="600" align="center" />
+<img src="https://github.com/msztylko/dashboard-prototyping/blob/master/images/dash_frontend.gif" data-canonical- width="800" height="400" align="center" />
 </p>
 
 ### Notes to self
