@@ -25,6 +25,8 @@ Scalable backend with efficient cache with implementation guided by load testing
 <img src="https://github.com/msztylko/dashboard-prototyping/blob/master/images/dash_frontend.gif" data-canonical- width="800" height="400" align="center" />
 </p>
 
+Highly customizable UI with instantaneous plots of 2 tickers thanks to efficient backend.
+
 ### Notes to self
 
 #### V1
